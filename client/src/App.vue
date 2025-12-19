@@ -28,10 +28,21 @@ function draw(state) {
 onMounted(() => {
   if (!socket) return;
 
+  window.addEventListener("keydown", handleKey);
+
   socket.on("game_state", (state) => {
     draw(state);
   });
 });
+
+function handleKey(e) {
+  if (e.key === "ArrowUp") {
+    socket.emit("player_input", { direction: -1 });
+  }
+  if (e.key === "ArrowDown") {
+    socket.emit("player_input", { direction: 1 });
+  }
+}
 </script>
 
 <template>
