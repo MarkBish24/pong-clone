@@ -23,6 +23,18 @@ function draw(state) {
   ctx.fillStyle = "white";
   ctx.fillRect(20, state.paddles.left.y, 10, 100);
   ctx.fillRect(canvas.width - 30, state.paddles.right.y, 10, 100);
+
+  //ball
+  const BALL_RADIUS = 8;
+  ctx.beginPath();
+  ctx.arc(
+    state.ball.x + BALL_RADIUS,
+    state.ball.y + BALL_RADIUS,
+    BALL_RADIUS,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
 }
 
 onMounted(() => {
