@@ -3,13 +3,15 @@ import { ref, inject, onMounted } from "vue";
 const socket = inject("socket");
 const canvasRef = ref(null);
 
-onMounted(() => {
+function draw(state) {
   const canvas = canvasRef.value;
   const ctx = canvas.getContext("2d");
 
+  //background
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  //center line
   ctx.strokeStyle = "white";
   ctx.setLineDash([5, 15]);
   ctx.beginPath();
@@ -17,13 +19,17 @@ onMounted(() => {
   ctx.lineTo(canvas.width / 2, canvas.height);
   ctx.stroke();
 
-  socket.on("game_state", (state) => {
-    const ctx = canvasRef.value.getContext("2d");
-    ctx.clearRect(0, 0, 800, 400);
+  //paddles
+  ctx.fillStyle = "white";
+  ctx.fillRect(20, state.paddles.left.y, 10, 100);
+  ctx.fillRect(canvas.width - 30, state.paddles.right.y, 10, 100);
+}
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(20, state.paddles.left.y, 10, 100);
-    ctx.fillRect(770, state.paddles.right.y, 10, 100);
+onMounted(() => {
+  if (!socket) return;
+
+  socket.on("game_state", (state) => {
+    draw(state);
   });
 });
 </script>
